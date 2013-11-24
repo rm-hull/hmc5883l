@@ -75,12 +75,12 @@ class hmc5883l:
 
         # Convert to degrees from radians
         headingDeg = headingRad * 180 / math.pi
+        return headingDeg
+
+    def degrees(self, (headingDeg)):
         degrees = math.floor(headingDeg)
         minutes = round((headingDeg - degrees) * 60)
         return (degrees, minutes)
-
-    def degrees(self, (degrees, minutes)):
-        return str(degrees) + "°" + str(minutes) + "'"
 
     def __str__(self):
         (x, y, z) = self.axes()
