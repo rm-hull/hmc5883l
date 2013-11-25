@@ -77,7 +77,7 @@ class hmc5883l:
         headingDeg = headingRad * 180 / math.pi
         return headingDeg
 
-    def degrees(self, (headingDeg)):
+    def degrees(self, headingDeg):
         degrees = math.floor(headingDeg)
         minutes = round((headingDeg - degrees) * 60)
         return (degrees, minutes)
