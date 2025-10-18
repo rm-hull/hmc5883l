@@ -90,9 +90,30 @@ class hmc5883l:
                "Declination: " + self.degrees(self.declination()) + "\n" \
                "Heading: " + self.degrees(self.heading()) + "\n"
 
-if __name__ == "__main__":
-    # http://magnetic-declination.com/Great%20Britain%20(UK)/Harrogate#
-    compass = hmc5883l(gauss = 4.7, declination = (-2,5))
+def main():
+    kws = {"port":"1", "address":"0x1E", "gauss": "4.7", "declination": "-2,5"}
+    args = []
+    for arg in sys.argv[1:]:
+        if arg.startswith("--"):
+            arg = arg[2:]
+            value = True
+            if "=" in arg:
+                arg, value = arg.split("=", 1)
+            kws[arg] = value
+        else:
+            args.append(arg)
+
+    if "help" in kws:
+        print("Usage: hmc5883l " + " ".join("--%s=%s" % item for item in kws.items()))
+        sys.exit(1)
+
+    kws["port"] = int(kws["port"], 0)
+    kws["address"] = int(kws["address"], 0)
+    kws["gauss"] = float(kws["gauss"])
+    kws["declination"] = [float(x) for x in kws["declination"].split(",")]
+
+    # Http://magnetic-declination.com/Great%20Britain%20(UK)/Harrogate#
+    compass = hmc5883l(**kws)
     while True:
         sys.stdout.write("\rHeading: " + str(compass.degrees(compass.heading())) + "     ")
         sys.stdout.flush()
